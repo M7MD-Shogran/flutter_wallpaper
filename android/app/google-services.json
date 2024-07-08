@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "168857943149",
+    "project_id": "wallpaper-bea3c",
+    "storage_bucket": "wallpaper-bea3c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168857943149:android:3ab6da39f74e79cc9b5364",
+        "android_client_info": {
+          "package_name": "com.example.wallpaper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbHOC04QM7K1OZP3BZ9W5SQONlu4TZwO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
