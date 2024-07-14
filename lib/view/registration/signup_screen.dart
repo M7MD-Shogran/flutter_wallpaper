@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wallpaper/components/colors.dart';
-import 'package:wallpaper/view/registration/components/fotter.dart';
 import 'package:wallpaper/view/registration/components/header.dart';
 import 'package:wallpaper/view/registration/login_screen.dart';
 import 'package:wallpaper/view/wallpaper.dart';
@@ -18,9 +17,12 @@ class _SignUpState extends State<SignUp> {
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
 
+  bool isLoading = false;
+
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   final FocusNode _passwordConfiremFocus = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +73,7 @@ class _SignUpState extends State<SignUp> {
                           cursorColor: ButtonColor,
                           obscureText: true,
                           keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.done,
+                          // textInputAction: TextInputAction.next,
                           focusNode: _passwordFocus,
                           onFieldSubmitted: (trem) {
                             _fieldFocusChange(context, _passwordFocus,
@@ -88,7 +90,7 @@ class _SignUpState extends State<SignUp> {
                       child: TextFormField(
                           controller: confirmPassword,
                           decoration: editText(
-                            labelText: 'Cofirem Password',
+                            labelText: 'Confirm Password',
                             textFieldIcon: Icon(Icons.check_box),
                           ),
                           cursorColor: ButtonColor,
@@ -97,7 +99,7 @@ class _SignUpState extends State<SignUp> {
                           textInputAction: TextInputAction.done,
                           focusNode: _passwordConfiremFocus,
                           onFieldSubmitted: (value) {
-                            _passwordFocus.unfocus();
+                            // _passwordFocus.unfocus();
                           }),
                     ),
                   ],
@@ -109,8 +111,14 @@ class _SignUpState extends State<SignUp> {
               Column(
                 children: <Widget>[
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * .06,
-                    width: MediaQuery.of(context).size.width * .6,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * .06,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * .6,
                     child: TextButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(ButtonColor),
@@ -125,9 +133,25 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ),
                       onPressed: () {
-                          singUp(email,password,confirmPassword);
-                          Navigator.pop(context);
-                           Navigator.push(context, MaterialPageRoute(builder: (context) => Wallpaper()));
+                        // if(password == confirmPassword){
+                        singUp(email, password, confirmPassword);
+                        // Navigator.pop(context);
+                        // Navigator.push(context, MaterialPageRoute(builder: (context) => Wallpaper()));
+                        // }
+                        // else{
+                        //   password.text = '';
+                        //   confirmPassword.text = '';
+                        //   Get.showSnackbar(
+                        //     GetSnackBar(
+                        //       // title: 'Oops!',
+                        //       message: 'Wrong Password!',
+                        //       duration: Duration(seconds: 5),
+                        //       borderRadius: 25,
+                        //       margin: EdgeInsets.all(MediaQuery.of(context).size.width * .06),
+                        //       backgroundColor: Theme.of(context).colorScheme.secondary,
+                        //     ),
+                        //   );
+                        // }
                       },
                       child: const Text(
                         'REGISTER',
@@ -144,34 +168,27 @@ class _SignUpState extends State<SignUp> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       const Text('You have an Account? ',
-                          style:  TextStyle(
+                          style: TextStyle(
                               color: Colors.black,
                               fontSize: 12,
                               fontWeight: FontWeight.w400)),
                       InkWell(
                           child: const Text('Login',
-                              style:  TextStyle(
+                              style: TextStyle(
                                 color: PrimaryColor,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                               )),
                           onTap: () {
-                             Get.to(Login());
+                            Get.back();
+                            Get.to(Login());
                           }
-                          // onClickText,
-                          )
+                        // onClickText,
+                      )
                     ],
                   ),
                 ],
               )
-              // Footer(
-              //   textButton: 'REGISTER',
-              //   textTitle: 'You have an Account? ',
-              //   textToGo: 'Login',
-              //   email: email,
-              //   password: password,
-              //   confirmPassword: confirmPassword,
-              // ),
             ],
           ),
         ),
@@ -208,14 +225,94 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  _fieldFocusChange(
-      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+  _fieldFocusChange(BuildContext context, FocusNode currentFocus,
+      FocusNode nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
   }
 
-  singUp (TextEditingController email ,TextEditingController password, TextEditingController confirmPassword)async{
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email.text, password: password.text);
-    Get.offAll(Wrapper());
+  singUp(TextEditingController email, TextEditingController password,
+      TextEditingController confirmPassword) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      if (password == confirmPassword) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: email.text, password: password.text);
+        Get.offAll(Wrapper());
+        Get.showSnackbar(
+          GetSnackBar(
+            // title: 'Oops!',
+            message: 'Login Successfully, Welcome',
+            duration: Duration(seconds: 3),
+            borderRadius: 25,
+            margin: EdgeInsets.all(MediaQuery
+                .of(context)
+                .size
+                .width * .06),
+            backgroundColor: Theme
+                .of(context)
+                .colorScheme
+                .secondary,
+          ),
+        );
+      } else {
+        Get.showSnackbar(
+          GetSnackBar(
+            // title: 'Oops!',
+            message: 'Wrong Password!',
+            duration: Duration(seconds: 3),
+            borderRadius: 25,
+            margin: EdgeInsets.all(MediaQuery
+                .of(context)
+                .size
+                .width * .06),
+            backgroundColor: Theme
+                .of(context)
+                .colorScheme
+                .secondary,
+          ),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      Get.showSnackbar(
+          GetSnackBar(
+            title: 'Oops!',
+            message: e.code,
+            duration: const Duration(seconds: 3),
+            borderRadius: 25,
+            margin: EdgeInsets.all(MediaQuery
+                .of(context)
+                .size
+                .width * .06),
+            backgroundColor: Theme
+                .of(context)
+                .colorScheme
+                .secondary,
+          ));
+    } catch (e) {
+
+        Get.showSnackbar(GetSnackBar(
+          title: 'Oops!',
+          message: e.toString(),
+          duration: Duration(seconds: 3),
+          borderRadius: 25,
+          margin: EdgeInsets.all(MediaQuery
+              .of(context)
+              .size
+              .height * .06),
+          backgroundColor: Theme
+              .of(context)
+              .colorScheme
+              .secondary,
+        ));
+
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wallpaper/components/colors.dart';
 
 class Header extends StatelessWidget {
   final String srcImage, title;
@@ -18,7 +17,9 @@ class Header extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary, fontSize: 40, fontWeight: FontWeight.w800),
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 40,
+                fontWeight: FontWeight.w800),
           ),
         ],
       ),

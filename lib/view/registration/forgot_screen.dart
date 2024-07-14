@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:wallpaper/components/colors.dart';
-import 'package:wallpaper/view/registration/components/fotter.dart';
 import 'package:wallpaper/view/registration/components/header.dart';
+import 'package:wallpaper/view/registration/login_screen.dart';
 
 class Forgot extends StatefulWidget {
   const Forgot({super.key});
@@ -77,7 +78,7 @@ class _ForgotState extends State<Forgot> {
                           },
                           child: const Text(
                             'RESET',
-                            style:  TextStyle(
+                            style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w600),
                           ),
                         ),
@@ -129,6 +130,61 @@ class _ForgotState extends State<Forgot> {
   }
 
   reset(TextEditingController email) async {
-    await FirebaseAuth.instance.sendPasswordResetEmail(email: email.text);
+    final user = FirebaseAuth.instance.currentUser;
+    // if(user?.email == email.text) {
+      try {
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: email.text);
+        Get.showSnackbar(
+            GetSnackBar(
+              // title: 'Oops!',
+              message: 'Check your Email.',
+              duration: const Duration(seconds: 3),
+              borderRadius: 25,
+              margin: EdgeInsets.all(MediaQuery
+                  .of(context)
+                  .size
+                  .width * .06),
+              backgroundColor: Theme
+                  .of(context)
+                  .colorScheme
+                  .secondary,
+            ));
+        Get.back();
+        Get.to( ()=> const Login());
+      } on FirebaseAuthException catch (e) {
+        Get.showSnackbar(
+            GetSnackBar(
+              title: 'Oops!',
+              message: 'invalid Email ${e.message}',
+              duration: const Duration(seconds: 3),
+              borderRadius: 25,
+              margin: EdgeInsets.all(MediaQuery
+                  .of(context)
+                  .size
+                  .width * .06),
+              backgroundColor: Theme
+                  .of(context)
+                  .colorScheme
+                  .secondary,
+            ));
+      }
+    // }
+    // else{
+    //   Get.showSnackbar(
+    //       GetSnackBar(
+    //         title: 'Oops!',
+    //         message: 'Email not Found!',
+    //         duration: const Duration(seconds: 3),
+    //         borderRadius: 25,
+    //         margin: EdgeInsets.all(MediaQuery
+    //             .of(context)
+    //             .size
+    //             .width * .06),
+    //         backgroundColor: Theme
+    //             .of(context)
+    //             .colorScheme
+    //             .secondary,
+    //       ));
+    // }
   }
 }

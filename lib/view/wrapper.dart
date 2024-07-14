@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wallpaper/view/favorite_screen.dart';
 import 'package:wallpaper/view/registration/login_screen.dart';
-import 'package:wallpaper/view/registration/verfiy_screen.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({super.key});
@@ -18,11 +17,12 @@ class _WrapperState extends State<Wrapper> {
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-        if(snapshot.hasData) {
-          return FavoriteScreen();
-        } else
-          return Login();
-      },),
+          if (snapshot.hasData) {
+            return FavoriteScreen();
+          } else
+            return Login();
+        },
+      ),
     );
   }
 }

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper/models/favorite/favorite_provider.dart';
 import 'package:wallpaper/view/full_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:wallpaper/view/registration/forgot_screen.dart';
 import 'package:wallpaper/view/wallpaper.dart';
 
 class FavoriteScreen extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser!;
-   FavoriteScreen({super.key});
+  FavoriteScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,6 @@ class FavoriteScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
-
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -138,10 +137,17 @@ class FavoriteScreen extends StatelessWidget {
           // StatefulBuilder
           builder: (context, setState) {
             return AlertDialog(
+              //   title: Center(child: Text('Logout')),
+              // titleTextStyle: TextStyle(
+              //   fontSize: 30,
+              //   fontWeight: FontWeight.w500,
+              //   color: Theme.of(context).colorScheme.secondary,
+              // ),
+
               backgroundColor: Theme.of(context).colorScheme.background,
               actions: <Widget>[
                 Container(
-                    width: MediaQuery.of(context).size.width * 1,
+                    width: MediaQuery.of(context).size.width * 0.6,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
@@ -149,9 +155,9 @@ class FavoriteScreen extends StatelessWidget {
                           height: 10,
                         ),
                         Text(
-                          "Are You Sure About That!!",
+                          "Do You wan\'t Logout!",
                           style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 20,
                               fontWeight: FontWeight.w500,
                               color: Theme.of(context).colorScheme.secondary),
                         ),
@@ -162,34 +168,31 @@ class FavoriteScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             MaterialButton(
-                              padding: EdgeInsets.fromLTRB(10.0, 5.0, 0, 0),
+                              // padding: EdgeInsets.fromLTRB(10.0, 5.0, 0, 0),
                               onPressed: () {
                                 setState(() {
-                                  Navigator.of(context).pop();
+                                  Get.back();
                                 });
                               },
                               child: Text("Cancel",
-                                  textAlign: TextAlign.end,
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.secondary,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                     fontSize: 15,
                                   )),
                             ),
                             MaterialButton(
-                              padding: EdgeInsets.fromLTRB(10.0, 5.0, 0, 0),
-                              child:  Text("OK",
-                                  textAlign: TextAlign.end,
+                              // padding: EdgeInsets.fromLTRB(10.0, 5.0, 0, 0),
+                              child: Text("OK",
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.secondary,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                     fontSize: 15,
                                   )),
                               onPressed: () {
                                 signout();
-                                Navigator.of(context).pop();
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Wallpaper()));
+                                Get.back();
+                                Get.to(Wallpaper());
                               },
                             ),
                           ],

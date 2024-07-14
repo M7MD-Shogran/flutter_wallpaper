@@ -1,9 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wallpaper/components/colors.dart';
-import 'package:wallpaper/view/registration/login_screen.dart';
-import 'package:wallpaper/view/registration/signup_screen.dart';
-import 'package:wallpaper/view/wallpaper.dart';
 
 // ignore: must_be_immutable
 class Footer extends StatelessWidget {
@@ -14,18 +10,18 @@ class Footer extends StatelessWidget {
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
 
-   Footer(
-      {super.key,
-      required this.textTitle,
-      required this.textToGo,
-      required this.email,
-      // required this.onClickButton,
-      // required this.onClickText,
-      required this.textButton,
-      // required this.whereToGo
-      required this.password,
-      confirmPassword,
-      }) ;
+  Footer({
+    super.key,
+    required this.textTitle,
+    required this.textToGo,
+    required this.email,
+    // required this.onClickButton,
+    // required this.onClickText,
+    required this.textButton,
+    // required this.whereToGo
+    required this.password,
+    confirmPassword,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +31,17 @@ class Footer extends StatelessWidget {
           height: MediaQuery.of(context).size.height * .06,
           width: MediaQuery.of(context).size.width * .6,
           child: TextButton(
-            style:  ButtonStyle(
+            style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(ButtonColor),
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+              ),
               elevation: MaterialStateProperty.all(50),
-              padding: MaterialStateProperty.all(EdgeInsets.only(left: 36, top: 12, right: 36, bottom: 12),),
+              padding: MaterialStateProperty.all(
+                EdgeInsets.only(left: 36, top: 12, right: 36, bottom: 12),
+              ),
             ),
-            onPressed:(){
+            onPressed: () {
               // if(textButton == 'LOGIN'){
               //   signIn(email,password);
               //   print('email $email.text \n password $password.text');
@@ -76,32 +76,29 @@ class Footer extends StatelessWidget {
                     fontSize: 12,
                     fontWeight: FontWeight.w400)),
             InkWell(
-              child: Text(textToGo,
-                  style: const TextStyle(
+                child: Text(textToGo,
+                    style: const TextStyle(
                       color: PrimaryColor,
                       fontSize: 12,
-                      fontWeight: FontWeight.w600,)),
-              onTap:(){
-              //   switch(textToGo){
-              //   case 'Login':
-              //   Navigator.pop(context);
-              //   Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-              //   break;
-              //   case 'Register' :
-              //   Navigator.pop(context);
-              //   Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
-              //   break;
-              // }
-              } 
-              // onClickText,
-            )
+                      fontWeight: FontWeight.w600,
+                    )),
+                onTap: () {
+                  //   switch(textToGo){
+                  //   case 'Login':
+                  //   Navigator.pop(context);
+                  //   Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                  //   break;
+                  //   case 'Register' :
+                  //   Navigator.pop(context);
+                  //   Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+                  //   break;
+                  // }
+                }
+                // onClickText,
+                )
           ],
         ),
       ],
     );
   }
-
-
-
-
 }

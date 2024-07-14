@@ -18,6 +18,7 @@ class _LoginState extends State<Login> {
   TextEditingController password = TextEditingController();
 
   bool isLoading = false;
+  bool? isChecked = false;
 
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
@@ -36,7 +37,7 @@ class _LoginState extends State<Login> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Header(
+                  const Header(
                     srcImage: 'assets/images/mobile_login.jpg',
                     title: 'Welcome Back',
                   ),
@@ -62,7 +63,7 @@ class _LoginState extends State<Login> {
                                     context, _emailFocus, _passwordFocus);
                               }),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Material(
@@ -87,19 +88,51 @@ class _LoginState extends State<Login> {
                         const SizedBox(
                           height: 10,
                         ),
-                        InkWell(
-                          child: const Align(
-                            alignment: AlignmentDirectional.centerEnd,
-                            child: Text('Forget Password?',
-                                style: TextStyle(
-                                  color: PrimaryColor,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                )),
-                          ),
-                          onTap: () {
-                            Get.to(Forgot());
-                          },
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(
+                                  activeColor: PrimaryColor,
+                                  // tristate: true,
+                                  value: isChecked,
+                                  onChanged: (bool? v) {
+                                    setState(() {
+                                      isChecked = v;
+                                    });
+                                  },
+                                ),
+                                Align(
+                                  alignment: AlignmentDirectional.bottomCenter,
+                                  child: Text('Remember Me',
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      )),
+                                )
+                              ],
+                            ),
+                            InkWell(
+                              child: const Align(
+                                alignment: AlignmentDirectional.centerEnd,
+                                child: Text('Forget Password?',
+                                    style: TextStyle(
+                                      color: PrimaryColor,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    )),
+                              ),
+                              onTap: () {
+                                Get.to(Forgot());
+                              },
+                            ),
+                          ],
                         ),
                         const SizedBox(
                           height: 15,
@@ -160,7 +193,8 @@ class _LoginState extends State<Login> {
                                           fontWeight: FontWeight.w600,
                                         )),
                                     onTap: () {
-                                      Get.to(SignUp());
+                                      Get.back();
+                                      Get.to(() => SignUp());
                                     })
                               ],
                             ),
@@ -210,41 +244,43 @@ class _LoginState extends State<Login> {
     FocusScope.of(context).requestFocus(nextFocus);
   }
 
-  signIn(context, TextEditingController email, TextEditingController password) async {
-    final user = FirebaseAuth.instance.currentUser;
+  signIn(context, TextEditingController email,
+      TextEditingController password) async {
+    // final user = FirebaseAuth.instance.currentUser;
     setState(() {
       isLoading = true;
     });
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email.text, password: password.text);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email.text, password: password.text);
       Navigator.pop(context);
+      Get.showSnackbar(
+        GetSnackBar(
+          // title: 'Oops!',
+          message: 'Login Successfully, Welcome',
+          duration: Duration(seconds: 5),
+          borderRadius: 25,
+          margin: EdgeInsets.all(MediaQuery.of(context).size.width * .06),
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
       Get.showSnackbar(GetSnackBar(
-        // title: 'Oops!',
-        message: 'Login Successfully, Welcome ${user?.displayName}',
-        duration: Duration(seconds: 5),
+        title: 'Oops!',
+        message: 'invalid Email or Password! ',
+        duration: const Duration(seconds: 5),
         borderRadius: 25,
         margin: EdgeInsets.all(MediaQuery.of(context).size.width * .06),
         backgroundColor: Theme.of(context).colorScheme.secondary,
       ));
-
-    } on FirebaseAuthException catch (e) {
-      print(e.code);
-      Get.showSnackbar(GetSnackBar(
-        title: 'Oops!',
-        message: 'invalid Email or Password \n (${e.code})',
-        duration: Duration(seconds: 5),
-        borderRadius: 25,
-        margin: EdgeInsets.all(MediaQuery.of(context).size.width * .06),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      )
-      );
     } catch (e) {
       Get.showSnackbar(GetSnackBar(
         title: 'Oops!',
         message: e.toString(),
         duration: Duration(seconds: 5),
         borderRadius: 25,
-        margin: EdgeInsets.all(MediaQuery.of(context).size.height * 3),
+        margin: EdgeInsets.all(MediaQuery.of(context).size.height * .06),
         backgroundColor: Theme.of(context).colorScheme.secondary,
       ));
     }

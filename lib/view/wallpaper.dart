@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:wallpaper/components/colors.dart';
 import 'package:wallpaper/view/full_screen.dart';
 import 'package:wallpaper/models/theme/theme_provider.dart';
+import 'package:wallpaper/view/settings/settings_screen.dart';
 import 'package:wallpaper/view/wrapper.dart';
 
 class Wallpaper extends StatefulWidget {
@@ -40,8 +42,7 @@ class _WallpaperState extends State<Wallpaper> {
         leading: IconButton(
           icon: Icon(Icons.favorite),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Wrapper()));
+            Get.to(Wrapper());
           },
         ),
         actions: [
@@ -50,7 +51,8 @@ class _WallpaperState extends State<Wallpaper> {
             onPressed: () {
               Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
             },
-          )
+          ),
+          IconButton(onPressed:() { Get.to(SettingsScreen());}, icon: Icon(Icons.settings),)
         ],
       ),
       body: images.isEmpty
@@ -102,15 +104,16 @@ class _WallpaperState extends State<Wallpaper> {
                             setState(() {
                               isLoading = true;
                             });
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => FullScreen(
-                                        imageUrl: images[index]['src']
-                                            ['original'],
-                                      ),
-                              ),
-                            );
+                            Get.to(FullScreen(imageUrl: images[index]['src']['original']));
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => FullScreen(
+                            //             imageUrl: images[index]['src']
+                            //                 ['original'],
+                            //           ),
+                            //   ),
+                            // );
                           },
                           child: Hero(
                             tag: images[index]['src']['original'],
@@ -177,4 +180,11 @@ class _WallpaperState extends State<Wallpaper> {
   //     });
   //   });
   // }
+
+// Must be in a Class
+//   extension _contextExtension on BuildContext{
+//   bool get isTablet => MediaQuery.of(this).size.shortestSide > 600 ;
+//   bool get isPhone => MediaQuery.of(this).size.shortestSide < 600 ;
+// } crossAxisCount: Context.isTablet ? 4:2
 }
+

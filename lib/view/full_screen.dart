@@ -127,66 +127,69 @@ class _FullScreenState extends State<FullScreen> {
                 ),
                 child: Center(
                   child: IconButton(
-                    hoverColor: Colors.blue.shade200,
-                    color: Colors.blue.shade200,
-                    icon:
-                        (favoriteProvider.isFavorite(widget.imageUrl.toString())
-                            ? const Icon(
-                                Icons.favorite,
-                                color: Color.fromRGBO(211, 47, 47, 1),
-                              )
-                            : const Icon(
-                                Icons.favorite_border,
-                                color: Color.fromRGBO(211, 47, 47, 1),
-                              )),
-                    onPressed: () async {
-                      if (user != null) {
-                        favoriteProvider.toggleFavorite(widget.imageUrl.toString());
-                        if (favoriteProvider.isFavorite(widget.imageUrl.toString())) {
+                      hoverColor: Colors.blue.shade200,
+                      color: Colors.blue.shade200,
+                      icon: (favoriteProvider
+                              .isFavorite(widget.imageUrl.toString())
+                          ? const Icon(
+                              Icons.favorite,
+                              color: Color.fromRGBO(211, 47, 47, 1),
+                            )
+                          : const Icon(
+                              Icons.favorite_border,
+                              color: Color.fromRGBO(211, 47, 47, 1),
+                            )),
+                      onPressed: () async {
+                        if (user != null) {
+                          favoriteProvider.toggleFavorite(widget.imageUrl.toString());
+                          if (favoriteProvider.isFavorite(widget.imageUrl.toString())) {
+                            Get.showSnackbar(GetSnackBar(
+                              // title: 'Oops!',
+                              message: 'Added Wallpaper ',
+                              duration: Duration(seconds: 3),
+                              borderRadius: 25,
+                              margin: EdgeInsets.all(
+                                  MediaQuery.of(context).size.width * .06),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              mainButton: TextButton(
+                                child: Text("Show All"),
+                                onPressed: () {
+                                  Get.to(FavoriteScreen());
+                                },
+                              ),
+                            ));
+                          } else {
+                            Get.showSnackbar(GetSnackBar(
+                              // title: 'Oops!',
+                              message: 'Wallpaper Removed',
+                              duration: Duration(seconds: 3),
+                              borderRadius: 25,
+                              margin: EdgeInsets.all(
+                                  MediaQuery.of(context).size.width * .06),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.secondary,
+                            ));
+                          }
+                        } else {
                           Get.showSnackbar(GetSnackBar(
                             // title: 'Oops!',
-                            message: 'Added Wallpaper ',
+                            message: 'Please Login to add Favorite',
                             duration: Duration(seconds: 3),
                             borderRadius: 25,
-                            margin: EdgeInsets.all(MediaQuery.of(context).size.width * .06),
-                            backgroundColor: Theme.of(context).colorScheme.secondary,
+                            margin: EdgeInsets.all(
+                                MediaQuery.of(context).size.width * .06),
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            maxWidth: Get.width,
                             mainButton: TextButton(
-                              child: Text("Show All"),
-                              onPressed: (){
-                                Get.to(FavoriteScreen());
-                              },
-                            ),
+                                child: Text('Login'),
+                                onPressed: () {
+                                  Get.to(Login());
+                                }),
                           ));
-                        } else {
-                              Get.showSnackbar(GetSnackBar(
-                                // title: 'Oops!',
-                                message: 'Wallpaper Removed',
-                                duration: Duration(seconds: 3),
-                                borderRadius: 25,
-                                margin: EdgeInsets.all(MediaQuery.of(context).size.width * .06),
-                                backgroundColor: Theme.of(context).colorScheme.secondary,
-                              ));
                         }
-                      }
-                      else {
-                        Get.showSnackbar(GetSnackBar(
-                          // title: 'Oops!',
-                          message: 'Please Login to add Favorite',
-                          duration: Duration(seconds: 5),
-                          borderRadius: 25,
-                          margin: EdgeInsets.all(MediaQuery.of(context).size.width * .06),
-                          backgroundColor: Theme.of(context).colorScheme.secondary,
-                          maxWidth: Get.width,
-                          mainButton: TextButton(
-                            child: Text('Login'),
-                            onPressed: (){
-                              Get.to(Login());
-                            }
-                          ),
-                        ));
-                      }
-                    }
-                      ),
+                      }),
                 ),
               ),
               SizedBox(
@@ -238,7 +241,8 @@ class _FullScreenState extends State<FullScreen> {
     // );
   }
 
-  Future<void> setWallpaperFromFile(String wallpaperUrl, BuildContext context) async {
+  Future<void> setWallpaperFromFile(
+      String wallpaperUrl, BuildContext context) async {
     Get.showSnackbar(GetSnackBar(
       // title: 'Oops!',
       message: 'Downloading Start ... ',
@@ -274,8 +278,9 @@ class _FullScreenState extends State<FullScreen> {
         backgroundColor: Theme.of(context).colorScheme.secondary,
         mainButton: TextButton(
           child: Text("Open"),
-          onPressed: (){ OpenFile.open(path);}
-          ,
+          onPressed: () {
+            OpenFile.open(path);
+          },
         ),
       ));
     } on PlatformException catch (error) {
@@ -288,13 +293,13 @@ class _FullScreenState extends State<FullScreen> {
   }
 
   Future<void> setWallpaper(String wallpaperUrl, int screenNum) async {
-        Get.showSnackbar(GetSnackBar(
-        // title: 'Oops!',
-        message: 'Appling Start ... ',
-        duration: Duration(seconds: 10),
-        borderRadius: 25,
-        margin: EdgeInsets.all(MediaQuery.of(context).size.width * .06),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
+    Get.showSnackbar(GetSnackBar(
+      // title: 'Oops!',
+      message: 'Appling Start ... ',
+      duration: Duration(seconds: 10),
+      borderRadius: 25,
+      margin: EdgeInsets.all(MediaQuery.of(context).size.width * .06),
+      backgroundColor: Theme.of(context).colorScheme.secondary,
     ));
     switch (screenNum) {
       case 1:
@@ -427,7 +432,8 @@ class _FullScreenState extends State<FullScreen> {
                               padding: EdgeInsets.fromLTRB(10.0, 5.0, 0, 0),
                               onPressed: () {
                                 setState(() {
-                                  Navigator.of(context).pop();
+                                  Get.back();
+                                  // Navigator.of(context).pop();
                                 });
                               },
                               child: const Text("Cancel",
@@ -440,7 +446,8 @@ class _FullScreenState extends State<FullScreen> {
                             MaterialButton(
                               padding: EdgeInsets.fromLTRB(10.0, 5.0, 0, 0),
                               onPressed: () {
-                                Navigator.of(context).pop();
+                                Get.back();
+                                // Navigator.of(context).pop();
                                 setWallpaper(wallpaperUrl, result);
                               },
                               child: const Text("OK",
@@ -468,18 +475,21 @@ class _FullScreenState extends State<FullScreen> {
           ? CircularProgressIndicator(
               color: Theme.of(context).colorScheme.primary,
             )
-          : Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(widget.imageUrl),
-                  fit: BoxFit.cover,
+          : InteractiveViewer(
+              constrained: true,
+            scaleEnabled: true,
+            child: Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(widget.imageUrl),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            );
-    }
-    catch (e) {
+          );
+    } catch (e) {
       setState(() {
         isLoading = false;
       });
